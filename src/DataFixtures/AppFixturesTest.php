@@ -27,16 +27,15 @@ class AppFixturesTest extends Fixture
 
         $this->loadUser($manager, $faker);
         // $this->loadGenre($manager, $faker);
-        // $this->loadEmprunteur($manager, $faker);
+        $this->loadEmprunteur($manager, $faker);
         // $this->loadEmprunt($manager,$faker);
         // $this->loadBook($manager,$faker);
         // $this->loadAuteur($manager,$faker);
-        $manager->flush();
+       
     }
     public function loadUser(ObjectManager $manager, FakerGenerator $faker): void
     {
-        $repository = $this->doctrine->getRepository(User::class);
-        $categories = $repository->findAll();
+        
 
         $userDatas=[
             [
@@ -89,5 +88,50 @@ class AppFixturesTest extends Fixture
         }
         $manager->flush();
     }
+    public function loadEmprunteur(ObjectManager $manager, FakerGenerator $faker): void
+    {
+        $repository = $this->doctrine->getRepository(User::class);
+        $users = $repository->findAll();
+    
+        $emprunteurDatas =[
+            [
+                "nom"=>'foo',
+                "prenom"=>'foo',
+                'tel'=>'123456789',
+                'actif'=>true,
+                'created_at'=>DateTimeImmutable::createFromFormat('Ymd H:i:s', '20220701 09:00:00'),
+                'updated_at'=>DateTimeImmutable::createFromFormat('Ymd H:i:s', '20220701 09:00:00'),
+                "user_id"=>$users[1]
+            ],[
+                "nom"=>'bar',
+                "prenom"=>'bar',
+                'tel'=>'123456789',
+                'actif'=>true,
+                'created_at'=>DateTimeImmutable::createFromFormat('Ymd H:i:s', '20220701 09:00:00'),
+                'updated_at'=>DateTimeImmutable::createFromFormat('Ymd H:i:s', '20220701 09:00:00'),
+                "user_id"=>$users[2]
+            ],[
+                "nom"=>'baz',
+                "prenom"=>'baz',
+                'tel'=>'123456789',
+                'actif'=>true,
+                'created_at'=>DateTimeImmutable::createFromFormat('Ymd H:i:s', '20220701 09:00:00'),
+                'updated_at'=>DateTimeImmutable::createFromFormat('Ymd H:i:s', '20220701 09:00:00'),
+                "user_id"=>$users[3]
+            ]
+            ];
+    foreach($emprunteurDatas as $emprunteurData){
+        $emprunteur=new Emprunteur();
+        $emprunteur->setNom($emprunteurData["nom"]);
+        $emprunteur->setPrenom($emprunteurData["prenom"]);
+        $emprunteur->setTel($emprunteurData["tel"]);
+        $emprunteur->setActif($emprunteurData['actif']);
+        $emprunteur->setCreatedAt($emprunteurData['created_at']);
+        $emprunteur->setUpdatedAt($emprunteurData['updated_at']);
+        $emprunteur->setUser($emprunteurData['user_id']);
+        $manager->persist($emprunteur);
 
+    }$manager->flush();
+    }
+    
 }
