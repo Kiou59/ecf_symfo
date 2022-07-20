@@ -133,5 +133,13 @@ class AppFixturesTest extends Fixture
 
     }$manager->flush();
     }
+    public function loadEmprunt(ObjectManager $manager, FakerGenerator $faker): void
+    {
+        $repository = $this->doctrine->getRepository(Emprunteur::class);
+        $emprunteurs = $repository->findAll();
+        $repository = $this->doctrine->getRepository(Book::class);
+        $books = $repository->findAll();
+    
+    }
     
 }
