@@ -37,7 +37,33 @@ class BookRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+        
     }
+       /**
+    * @return Book[] Returns an array of Book objects
+    */
+    public function findByKeyword(string $keyword): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.title LIKE :keyword')
+            ->setParameter('keyword', "%{$keyword}%")
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+       /**
+    * @return Book[] Returns an array of Book objects
+    */
+   public function findByAuteur($auteur): array
+   {
+       return $this->createQueryBuilder('b')
+           ->join('b.auteur','a')
+           ->andWhere('a.id= :auteurId')
+           ->setParameter('auteurId', $auteur->getId())
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    /**
 //     * @return Book[] Returns an array of Book objects
