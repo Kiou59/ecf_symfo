@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Emprunteur;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
 
 /**
  * @extends ServiceEntityRepository<Emprunteur>
@@ -37,6 +39,66 @@ class EmprunteurRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+       /**
+    * @return Emprunteur[] Returns an array of Emprunteur objects
+    */
+   public function findByKeyword(string $keyword): array
+   {
+       return $this->createQueryBuilder('e')
+           ->where('e.nom LIKE :val')
+           ->orWhere('e.prenom LIKE :val')
+           ->setParameter('val', "%{$keyword}%")
+           ->orderBy('e.id', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+      /**
+    * @return Emprunteur[] Returns an array of Emprunteur objects
+    */
+   public function findByTel(string $telNum): array
+   {
+       return $this->createQueryBuilder('e')
+           ->andWhere('e.tel LIKE :val')
+           ->setParameter('val', "%{$telNum}%")
+           ->orderBy('e.id', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+      /**
+    * @return Emprunteur[] Returns an array of Emprunteur objects
+    */
+   public function findByCreatedAt(DateTime $createdAt): array
+   {
+       return $this->createQueryBuilder('e')
+           ->andWhere('e.created_at < :createdAt')
+           ->setParameter('createdAt', $createdAt)
+           ->orderBy('e.id', 'ASC')
+
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+         /**
+    * @return Emprunteur[] Returns an array of Emprunteur objects
+    */
+    public function isActif(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.actif = 1')
+            
+            ->orderBy('e.id', 'ASC')
+ 
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**

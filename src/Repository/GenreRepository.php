@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Book;
 use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,6 +40,37 @@ class GenreRepository extends ServiceEntityRepository
         }
     }
 
+       /**
+    * @return Genre[] Returns an array of Genre objects
+    */
+   public function findByKeyword (string $keyword): array
+   {
+       return $this->createQueryBuilder('g')
+       ->join(Book::class,'b')
+           ->andWhere('g.nom LIKE :genre')
+
+           ->setParameter('genre', "%{$keyword}%")
+           ->orderBy('g.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+      /**
+    * @return Genre[] Returns an array of Genre objects
+    */
+   public function findByBook(Book $book): array
+   {
+       return $this->createQueryBuilder('g')
+           ->join("g.books","b")
+           ->andWhere('b.id = :val')
+           ->setParameter('val', $book->getId())
+           ->orderBy('g.id', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 //    /**
 //     * @return Genre[] Returns an array of Genre objects
 //     */

@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Book;
 use App\Entity\Emprunt;
+use App\Entity\Emprunteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
 
 /**
  * @extends ServiceEntityRepository<Emprunt>
@@ -39,6 +42,64 @@ class EmpruntRepository extends ServiceEntityRepository
         }
     }
 
+       /**
+    * @return Emprunt[] Returns an array of Emprunt objects
+    */
+   public function findByLastTen(): array
+   {
+       return $this->createQueryBuilder('e')
+
+           ->orderBy('e.date_emprunt', 'DESC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+      /**
+    * @return Emprunt[] Returns an array of Emprunt objects
+    */
+   public function findByEmprunteur(Emprunteur $emprunteur): array
+   {
+       return $this->createQueryBuilder('e')
+       ->join("e.emprunteur", "emprunteur")
+           ->andWhere('emprunteur.id = :val')
+           ->setParameter('val', $emprunteur->getId())
+           ->orderBy('e.id', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+         /**
+    * @return Emprunt[] Returns an array of Emprunt objects
+    */
+    public function findByBook(Book $book): array
+    {
+        return $this->createQueryBuilder('e')
+        ->join("e.book", "book")
+            ->where('book.id = :val')
+            ->andWhere('e.date_retour IS NULL')
+            ->setParameter('val', $book->getId())
+            ->orderBy('e.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+   /**
+    * @return Emprunt[] Returns an array of Emprunt objects
+    */
+   public function findByRetour(): array
+   {
+       return $this->createQueryBuilder('e')
+           ->andWhere('e.date_retour IS NULL')
+           ->orderBy('e.id', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 //    /**
 //     * @return Emprunt[] Returns an array of Emprunt objects
 //     */

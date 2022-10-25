@@ -126,7 +126,7 @@ class AppFixturesTest extends Fixture
                 'updated_at'=>DateTimeImmutable::createFromFormat('Ymd H:i:s', '20220701 09:00:00'),
                 "user_id"=>$users[1]
             ],[
-                "nom"=>'bar',
+                "nom"=>'foo',
                 "prenom"=>'bar',
                 'tel'=>'123456789',
                 'actif'=>true,
@@ -135,7 +135,7 @@ class AppFixturesTest extends Fixture
                 "user_id"=>$users[2]
             ],[
                 "nom"=>'baz',
-                "prenom"=>'baz',
+                "prenom"=>'foo',
                 'tel'=>'123456789',
                 'actif'=>true,
                 'created_at'=>DateTimeImmutable::createFromFormat('Ymd H:i:s', '20220701 09:00:00'),

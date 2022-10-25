@@ -3,8 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Book;
+use App\Entity\Auteur;
+use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+
 
 /**
  * @extends ServiceEntityRepository<Book>
@@ -46,7 +51,7 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.title LIKE :keyword')
-            ->setParameter('keyword', "%{$keyword}%")
+            ->setParameter('keyword', "%{$keyword}")
             ->orderBy('b.id', 'ASC')
             ->getQuery()
             ->getResult();
@@ -54,17 +59,46 @@ class BookRepository extends ServiceEntityRepository
        /**
     * @return Book[] Returns an array of Book objects
     */
-   public function findByAuteur($auteur): array
+   public function findByAuteur(Auteur $auteurId): array
    {
        return $this->createQueryBuilder('b')
            ->join('b.auteur','a')
            ->andWhere('a.id= :auteurId')
-           ->setParameter('auteurId', $auteur->getId())
+           ->setParameter('auteurId', $auteurId->getId())
            ->getQuery()
            ->getResult()
        ;
    }
 
+   public function findByGenre(Genre $genre): array
+   {
+       return $this->createQueryBuilder('b')
+       ->join("b.genres","g")
+           ->andWhere("g.id = :gId")
+           ->setParameter('gId', $genre->getId())
+           ->orderBy('b.id')
+           ->getQuery()
+           ->getResult()
+           ;
+   }
+      /**
+   * @return Book[] Returns an array of Book objects
+   */
+
+      /**
+    * @return Book[] Returns an array of Book objects
+    */
+   public function findByKeywordGenre(string $value): array
+   {
+       return $this->createQueryBuilder('b')
+            ->join("b.genres", "g")
+           ->andWhere('g.nom LIKE :val')
+           ->setParameter('val', "% {$value} %")
+           ->orderBy('b.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 //    /**
 //     * @return Book[] Returns an array of Book objects
 //     */
