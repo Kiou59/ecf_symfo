@@ -51,7 +51,7 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.title LIKE :keyword')
-            ->setParameter('keyword', "%{$keyword}")
+            ->setParameter('keyword', "%{$keyword}%")
             ->orderBy('b.id', 'ASC')
             ->getQuery()
             ->getResult();
@@ -93,7 +93,7 @@ class BookRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('b')
             ->join("b.genres", "g")
            ->andWhere('g.nom LIKE :val')
-           ->setParameter('val', "% {$value} %")
+           ->setParameter('val', "%{$value}%")
            ->orderBy('b.id', 'ASC')
            ->getQuery()
            ->getResult()

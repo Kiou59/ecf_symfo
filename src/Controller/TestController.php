@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Book;
 use App\Repository\AuteurRepository;
 use App\Repository\BookRepository;
 use App\Repository\EmprunteurRepository;
 use App\Repository\EmpruntRepository;
-use App\Repository\GenreRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +24,7 @@ class TestController extends AbstractController
         $book1=$bookRepository->find(1);
         dump($book1);
 
-        $keyword="lorem ";
+        $keyword="lorem";
         $booksLorem=$bookRepository->findByKeyword($keyword);
         dump($booksLorem);
 
