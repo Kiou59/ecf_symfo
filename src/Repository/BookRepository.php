@@ -108,21 +108,30 @@ class BookRepository extends ServiceEntityRepository
            ->getOneOrNullResult()
        ;
    }
-    //   /**
-//     * @return Book[] Returns an array of Book objects
-//     */
-//    public function findByEmprunts(Emprunt $emprunts): array
-//    {
-//        return $this->createQueryBuilder('b')
-//             ->join('b.emprunts','e')
-//            ->andWhere('e.id = :empruntId')
-//            ->setParameter('empruntId', $emprunts->getId())
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+         /**
+    * @return Book[] Returns an array of Book objects
+    */
+   public function filter(?string $mot): array
+   {
+    if($mot==null){
+        return $this->createQueryBuilder('b')
+        ->orderBy('b.id','ASC')
+        ->getQuery()
+        ->getResult();
+    }else
+     {return $this->createQueryBuilder('b')
+       ->join('b.auteur','a')
+       ->andWhere('b.title LIKE :keyword')
+       ->orWhere('a.nom LIKE :keyword')
+       ->orWhere('b.code_isbn= :Isbn')
+       ->setParameter('keyword', "%{$mot}%")
+       ->setParameter('Isbn', $mot)
+           ->orderBy('b.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;}
+   }
+
 
 //    /**
 //     * @return Book[] Returns an array of Book objects

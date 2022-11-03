@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use App\Repository\AuteurRepository;
 use App\Repository\BookRepository;
 use App\Repository\EmprunteurRepository;
@@ -72,13 +73,17 @@ class TestController extends AbstractController
     }
 
     #[Route('/test/lecture/emprunteur', name: 'app_controler_emprunteur')]
-    public function emprunteurRead (EmprunteurRepository $emprunteurRepository): Response
+    public function emprunteurRead (UserRepository $userRepository,EmprunteurRepository $emprunteurRepository): Response
     {
         $emprunteur=$emprunteurRepository->findAll();
         dump($emprunteur);
 
         $emprunteurId=$emprunteurRepository->findById(3);
         dump($emprunteurId);
+
+        $user=$userRepository->find(3);
+        $emprunteurUserId=$emprunteurRepository->findByUser($user);
+        dump($emprunteurUserId);
 
         $keyword='foo';
         $emprunteurByKey=$emprunteurRepository->findByKeyword($keyword);
@@ -105,7 +110,8 @@ class TestController extends AbstractController
         dump($emprunts);
 
         $emprunteur=$emprunteurRepository->find(2);
-        $emprunts=$empruntRepository->findByEmprunteur($emprunteur);
+        $emprunts=[];
+        $emprunts=$emprunteur->getEmprunts();
         dump($emprunts);
         $book=$bookRepository->find(3);
 

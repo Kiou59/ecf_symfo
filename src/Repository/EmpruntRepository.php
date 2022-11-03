@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Book;
 use App\Entity\Emprunt;
 use App\Entity\Emprunteur;
@@ -66,7 +67,6 @@ class EmpruntRepository extends ServiceEntityRepository
            ->andWhere('emprunteur.id = :val')
            ->setParameter('val', $emprunteur->getId())
            ->orderBy('e.id', 'ASC')
-           ->setMaxResults(10)
            ->getQuery()
            ->getResult()
        ;
@@ -82,7 +82,6 @@ class EmpruntRepository extends ServiceEntityRepository
             ->andWhere('e.date_retour IS NULL')
             ->setParameter('val', $book->getId())
             ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
@@ -95,11 +94,11 @@ class EmpruntRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('e')
            ->andWhere('e.date_retour IS NULL')
            ->orderBy('e.id', 'ASC')
-           ->setMaxResults(10)
            ->getQuery()
            ->getResult()
        ;
    }
+
 //    /**
 //     * @return Emprunt[] Returns an array of Emprunt objects
 //     */
