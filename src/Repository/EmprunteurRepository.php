@@ -106,7 +106,7 @@ class EmprunteurRepository extends ServiceEntityRepository
     public function findByUser(User $user): ?Emprunteur
     {
                return $this->createQueryBuilder('e')
-           ->andWhere('e.id = :val')
+           ->andWhere('e.user = :val')
            ->setParameter('val', $user->getId())
            ->getQuery()
            ->getOneOrNullResult()
