@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Repository\EmprunteurRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +20,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login';
+    public const LOGIN_ROUTE = 'login';
+    private UrlGeneratorInterface $urlGenerator;
+    private EmprunteurRepository $emprunteurRepository; 
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct( EmprunteurRepository $emprunteurRepository, UrlGeneratorInterface $urlGenerator)
     {
+        $this->emprunteurRepository = $emprunteurRepository;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function authenticate(Request $request): Passport
@@ -45,9 +50,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-
+        $user=$token->getUser();
+        $roles=$user->getRoles();
+        if(in_array('ROLE_ADMIN',$roles)){
+            $emprunteur= $this->emprunteurRepository->findByUser($user);
+            return new RedirectResponse($this->urlGenerator->generate('user_emprunts'));
+        }
         // For example:
-        return new RedirectResponse($this->urlGenerator->generate('acceuil'));
+        return new RedirectResponse($this->urlGenerator->generate('user_emprunts'));
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

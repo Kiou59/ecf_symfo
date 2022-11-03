@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Auteur;
+use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
 
 /**
  * @extends ServiceEntityRepository<Auteur>
@@ -39,6 +41,20 @@ class AuteurRepository extends ServiceEntityRepository
         }
     }
 
+       /**
+    * @return Auteur[] Returns an array of Auteur objects
+    */
+
+      public function findOneByBooks($value): ?Auteur
+   {
+       return $this->createQueryBuilder('a')
+       ->join('a.books', 'b')
+       ->andWhere('b.id =:bookId')
+       ->setParameter('bookId', $value->getId())
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
 //    /**
 //     * @return Auteur[] Returns an array of Auteur objects
 //     */

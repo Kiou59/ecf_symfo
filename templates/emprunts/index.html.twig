@@ -3,18 +3,33 @@
 {% block title %}Hello EmpruntsController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% if is_granted('ROLE_ADMIN')  %}
+<h1>Bonjour Admin</h1>
+<p>Liste des emprunts</p>
+<ul>
+{% for emprunt in emprunts %}
+<li>{{emprunt.book.title}} Emprunté par {{emprunt.emprunteur.nom}} {{emprunt.emprunteur.prenom}} </li>
+{% if emprunt.dateRetour == null %}
+<li>Non rendu</li>
+{% else %}
+   <li>rendu le {{emprunt.dateRetour|date('d-m-Y')}}</li> 
+{% endif %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/kiou/projects/bibliotheque/src-bibliotheque/src/Controller/EmpruntsController.php'|file_link(0) }}">src/Controller/EmpruntsController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/kiou/projects/bibliotheque/src-bibliotheque/templates/emprunts/index.html.twig'|file_link(0) }}">templates/emprunts/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% endfor %}
+</ul>
+{% elseif is_granted('ROLE_EMPRUNTEUR')  %}
+<h1>Bonjour {{emprunteur.nom}}</h1>
+<p>Liste de vos emprunts</p>
+<ul>
+{% for emprunt in emprunts %}
+<li>{{emprunt.book.title}} </li>
+{% if emprunt.dateRetour == null %}
+<li>Non rendu</li>
+{% else %}
+   <li>rendu le {{emprunt.dateRetour|date('d-m-Y')}}</li> 
+{% endif %}
+{% endfor %}
+</ul>
+{% endif %}
 {% endblock %}

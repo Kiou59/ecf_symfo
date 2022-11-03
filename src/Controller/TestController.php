@@ -24,7 +24,7 @@ class TestController extends AbstractController
         $book1=$bookRepository->find(1);
         dump($book1);
 
-        $keyword="lorem";
+        $keyword="lorem ";
         $booksLorem=$bookRepository->findByKeyword($keyword);
         dump($booksLorem);
 
@@ -117,6 +117,20 @@ class TestController extends AbstractController
         exit();
         return $this->render('emprunts/empruntRead.html.twig', [
             'controller_name' => 'EmpruntsController',
+        ]);
+    }
+    #[Route('/test/lecture/auteur', name: 'app_controler_auteurs')]
+    public function readAuteurs(AuteurRepository $auteurRepository): Response
+    {
+                    // récupération de la liste complète de toutes les users
+                    $auteurs = $auteurRepository->findAll();
+                    //inspection de la liste
+                    dump($auteurs);
+            
+
+                    exit();
+        return $this->render('controler_test/userRead.html.twig', [
+            'controller_name' => 'ControlerTestController',
         ]);
     }
 }

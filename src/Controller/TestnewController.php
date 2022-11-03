@@ -41,7 +41,7 @@ class TestnewController extends AbstractController
     #[Route('/test/edit/book', name: 'test_edit_book')]
     public function editBook(ManagerRegistry $doctrine , AuteurRepository $auteurRepository, GenreRepository $genreRepository, BookRepository $bookRepository): Response
     {
-        $genres= $genreRepository->findAll();
+        $newGenre= $genreRepository->find(5);
             $book= $bookRepository->find(2);
             $genre=$genreRepository->findByBook($book);
 
@@ -49,7 +49,7 @@ class TestnewController extends AbstractController
             foreach($genre as $g){
                 $book->removeGenre($g);
             }
-            $book->addGenre($genres[5]);
+            $book->addGenre($newGenre);
 
             $book=$doctrine->getManager();
             $book->flush();

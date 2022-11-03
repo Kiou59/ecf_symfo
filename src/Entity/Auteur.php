@@ -22,11 +22,11 @@ class Auteur
     private ?string $prenom = null;
 
     #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: Book::class)]
-    private Collection $genres;
+    private Collection $books;
 
     public function __construct()
     {
-        $this->genres = new ArrayCollection();
+        $this->books = new ArrayCollection();
     }
 
     public function getId(): ?int

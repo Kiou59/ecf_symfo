@@ -4,10 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use App\Entity\Auteur;
+use App\Entity\Emprunt;
 use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 
@@ -99,6 +98,32 @@ class BookRepository extends ServiceEntityRepository
            ->getResult()
        ;
    }
+      public function findOneByEmprunt(Emprunt $emprunt): ?Book
+   {
+       return $this->createQueryBuilder('b')
+            ->join('b.emprunts','e')
+           ->andWhere('e.id = :empruntId')
+           ->setParameter('empruntId', $emprunt->getId())
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
+    //   /**
+//     * @return Book[] Returns an array of Book objects
+//     */
+//    public function findByEmprunts(Emprunt $emprunts): array
+//    {
+//        return $this->createQueryBuilder('b')
+//             ->join('b.emprunts','e')
+//            ->andWhere('e.id = :empruntId')
+//            ->setParameter('empruntId', $emprunts->getId())
+//            ->orderBy('b.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
+
 //    /**
 //     * @return Book[] Returns an array of Book objects
 //     */
