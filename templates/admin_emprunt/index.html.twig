@@ -1,20 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminEmpruntController!{% endblock %}
+{% block title %}Administation des emprunts{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/kiou/projects/bibliotheque/src-bibliotheque/src/Controller/AdminEmpruntController.php'|file_link(0) }}">src/Controller/AdminEmpruntController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/kiou/projects/bibliotheque/src-bibliotheque/templates/admin_emprunt/index.html.twig'|file_link(0) }}">templates/admin_emprunt/index.html.twig</a></code></li>
-    </ul>
-</div>
+        <a class='btn btn-primary' href="{{ path('app_admin_emprunt_new') }}">Enregistrer un nouvel emprunt</a>
+<ul>
+{% for emprunt in emprunts %}
+    <li><a href='{{path('app_admin_emprunt_show',{"id":emprunt.id})}}'>{{emprunt.book.title}}</a> Emprunté par {{emprunt.emprunteur.nom}} {{emprunt.emprunteur.prenom}} </li>
+{% if emprunt.dateRetour == null %}
+<li>Non rendu</li>
+{% else %}
+   <li>rendu le {{emprunt.dateRetour|date('d-m-Y')}}</li> 
+{% endif %}
+{% endfor %}
+</ul>
 {% endblock %}

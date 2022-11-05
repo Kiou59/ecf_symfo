@@ -39,7 +39,7 @@ class AcceuilController extends AbstractController
         return $this->render('acceuil/book_details.html.twig',[
             
             'book'=>$book,
-            'auteurs'=>$auteurRepository->findOneByBooks($book),
+            'auteurs'=>$book->getAuteur(),
         ]
             
         );
