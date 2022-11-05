@@ -1,13 +1,13 @@
 # ecf_symfo
-Pour commencer 
+#Pour commencer 
 cloner le répo : ouvrez votre terminal entrez la commande git clone git@github.com:Kiou59/ecf_symfo.git
 toujours dans votre terminal : cd ecf_symfo 
 puis 
 composer require symfony/runtime
 
-instaler la bdd : à la racine du dossier ecf_symfo créez un fichier .env.local
+#instaler la bdd : à la racine du dossier ecf_symfo créez un fichier .env.local
 copiez coller la ligne suivante et modifier les champ entre crochet
-# DATABASE_URL="mysql://{db_user}:{db_password}@127.0.0.1:3306/{db_name*}?{serverVersion=5.7}&charset=utf8mb4"
+ DATABASE_URL="mysql://{db_user}:{db_password}@127.0.0.1:3306/{db_name*}?{serverVersion=5.7}&charset=utf8mb4"
 //*inutile de créé une base de donné en amont nous allons utilisé un script pour la généré
 dans un terminal dans le dossier ecf_symfo taper la commande : ./bin/dofilo.sh
 cette commande lance un script qui crée la base de donnée et injecte les donnée.
