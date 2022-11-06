@@ -57,7 +57,9 @@ class EmpruntsController extends AbstractController
         $userEmprunteurId=$emprunt->getEmprunteur()->getUser()->getId();
 
         $userEmprunteurId=$emprunt->getEmprunteur()->getUser()->getId();
-        if($this->isGranted('ROLE_EMPRUNTEUR')&& $userEmprunteurId!=$userId){
+        if($this->isGranted('ROLE_ADMIN')){
+            
+        }elseif($this->isGranted('ROLE_EMPRUNTEUR')&& $userEmprunteurId!=$userId){
             throw new NotFoundHttpException();
 
         }
