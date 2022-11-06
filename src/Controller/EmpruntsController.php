@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Emprunt;
+use App\Entity\User;
 use App\Repository\EmprunteurRepository;
 use App\Repository\EmpruntRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 
 
@@ -48,12 +48,19 @@ class EmpruntsController extends AbstractController
         ]);
     }
 
-#[Security("(is_granted('ROLE_EMPRUNTEUR') and user.getId() === emprunt.getEmprunteur().getUser().getId() ) or is_granted('ROLE_ADMIN')")]
-    #[Route('/emprunts/{id}', name: 'emprunts_details')]
-    public function empruntsDetails(Emprunt $emprunt,EmpruntRepository $empruntRepository):Response
-    {
-        
 
+    #[Route('/emprunts/{id}', name: 'emprunts_details')]
+    public function empruntsDetails(User $user,Emprunt $emprunt,EmpruntRepository $empruntRepository):Response
+    {
+        $user=$this->getUser();
+        $userId=$user->getId();
+        $userEmprunteurId=$emprunt->getEmprunteur()->getUser()->getId();
+
+        $userEmprunteurId=$emprunt->getEmprunteur()->getUser()->getId();
+        if($this->isGranted('ROLE_EMPRUNTEUR')&& $userEmprunteurId!=$userId){
+            throw new NotFoundHttpException();
+
+        }
         return $this->render('emprunts/emprunt_details.html.twig', [
             'controller_name' => 'EmpruntsController',
             'emprunt' =>$emprunt
